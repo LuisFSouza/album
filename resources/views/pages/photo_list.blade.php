@@ -75,7 +75,7 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
 
         <form action="/photos/" method="POST" id="formDeletePhoto">
-        @method('DELETE')
+        @method('delete')
         @csrf
           <button class="btn btn-danger" type="submit">
               <i class="fas fa-trash-alt"></i> Sim, Excluir
@@ -86,8 +86,6 @@
   </div>
 </div>
 
-<script>
-  <script src="{{asset('/js/script.js')}}">
-</script>
+<script src="{{asset('/js/script.js')}}"></script>
 
 @endsection
