@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
 //Rota página inicial
 Route::get('/', [PhotoController::class, 'index']);
 
@@ -32,3 +31,5 @@ Route::post('/photos', [PhotoController::class, 'store']);
 //Rota que altera uma foto no banco de dados
 Route::put('/photos/{id}', [PhotoController::class, 'update']);
 
+//Rota que exclui uma foto no banco de dados
+Route::delete('/photos/{id}', [PhotoController::class, 'destroy']);
