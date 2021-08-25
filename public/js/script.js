@@ -1,3 +1,8 @@
+ /*
+=========================================================================
+  Modal
+=========================================================================
+ */
  //variável que recebe o elemento html(Modal)
  var confirmationModal = document.getElementById('confirmationModal')
 
@@ -13,3 +18,20 @@
    //Alterando o Action(rota) do formulário
    form.action = "/photos/"+button.getAttribute('data-photo-id')
  })
+
+/*
+=========================================================================
+  Carregar Imagem
+=========================================================================
+*/
+ function loadFile(event){
+
+  //Variável que recebe o elemento img
+  var imgPrev = document.getElementById("imgPrev")
+  
+  //Link para a imagem
+  var url = URL.createObjectURL(event.target.files[0])
+
+  //Altera a propriedade src para o link da imagem
+  imgPrev.src = url
+}
