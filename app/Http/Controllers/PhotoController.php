@@ -55,22 +55,18 @@ class PhotoController extends Controller
 
         //Upload
         if($request->hasFile('photo') && $request->file('photo')){
-            //Define um nome aleatório para a foto, com base na data e hora atual
-            $nomeFoto = uniqid(date('HisYmd'));
+            
+            //Salvando o caminho completo em uma variável
+            $upload = $this->uploadPhoto($request->photo);
 
-            //Recupera a extensão do arquivo
-            $extensao = $request->photo->extension();
+            //Dividindo a string em um array
+            $directoryArray = explode(DIRECTORY_SEPARATOR, $upload);
 
-            //Nome do arquivo com extensão
-            $nomeArquivo = "{$nomeFoto}.{$extensao}";
-
-            //Upload
-            $upload = $request->photo->move(public_path('/storage/photos'), $nomeArquivo);
-
-            $photo->photo_url = $nomeArquivo;
+            //Adicionando o nome do arquivo ao atributo photo_url
+            $photo->photo_url = end($directoryArray);
          }
         
-        if($upload){
+        if($directoryArray){
             //Inserindo no banco de dados
             $photo->save();
         }
@@ -136,9 +132,42 @@ class PhotoController extends Controller
     public function destroy($id)
     {
         //Retornar e excluir a foto do banco de dados
-        Photo::findOrFail($id)->delete();
+        $photo = Photo::findOrFail($id);
+        
+        //Excluir foto
+        $this->deletePhoto($photo->photo_url);
+
+        //Excluir o registro do BD
+        $photo->delete();
 
         //Redirecionar para a página de fotos
         return redirect('/photos');
     }
-}
+
+    public function uploadPhoto($photo){
+       
+        //Define um nome aleatório para a foto, com base na data e hora atual
+        $nomeFoto = sha1(uniqid(date('HisYmd')));
+
+        //Recupera a extensão do arquivo
+        $extensao = $photo->extension();
+
+        //Nome do arquivo com extensão
+        $nomeArquivo = "{$nomeFoto}.{$extensao}";
+
+        //Upload
+        $upload = $photo->move(public_path("storage".DIRECTORY_SEPARATOR."photos"), $nomeArquivo);
+        
+        return $upload;
+    }
+
+    public function deletePhoto($fileName){
+
+      //Verifica se o arquivo existe
+      if(file_exists(public_path("storage".DIRECTORY_SEPARATOR."photos".DIRECTORY_SEPARATOR.$fileName))){
+            
+        //Excluir o arquivo de imagem
+        unlink(public_path("storage".DIRECTORY_SEPARATOR."photos".DIRECTORY_SEPARATOR.$fileName));
+      }//Fim do if
+    }
+}//Fim do controller
