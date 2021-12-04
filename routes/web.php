@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Route;
 //Rota página inicial
 Route::get('/', [PhotoController::class, 'index']);
 
+Route::middleware(['auth'])->group(function(){
+
+//Rota que exibe as fotos do usuário
 Route::get('/photos', [PhotoController::class, 'showAll']);
 
 //Rota que exibe o formulário de cadastro
@@ -33,6 +36,8 @@ Route::put('/photos/{id}', [PhotoController::class, 'update']);
 
 //Rota que exclui uma foto no banco de dados
 Route::delete('/photos/{id}', [PhotoController::class, 'destroy']);
+
+});
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
