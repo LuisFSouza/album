@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 //Rota página inicial
 Route::get('/', [PhotoController::class, 'index']);
+Route::get('/dashboard',[PhotoController::class, 'index'])->name('dashboard');
 
 Route::middleware(['auth'])->group(function(){
 
@@ -38,7 +39,3 @@ Route::put('/photos/{id}', [PhotoController::class, 'update']);
 Route::delete('/photos/{id}', [PhotoController::class, 'destroy']);
 
 });
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
